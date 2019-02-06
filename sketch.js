@@ -1,7 +1,7 @@
 
 let g;
-let cols = 50;
-let rows = 50;
+let cols = 65;
+let rows = 65;
 let w,l;
 let cells=[];
 let s,goal;//start and goal vertices
@@ -13,17 +13,19 @@ function setup(){
   w = Math.floor(innerWidth/cols);
   l = Math.floor(innerHeight/rows);
   for(let i = 0;i<cols;i++){
-      let temp = [];
-    for(let j = 0;j<rows;j++){
+    for(let j = 0;j<rows;j++){//the col to the left of it exists
       let v=new Vertex(data=[i*w,l*j],edges=[],weights=[],key=i*rows+j);
-      if(i>0){
-        v.addEdge(cells[(i-1)*rows+j],1,dir=false);//above it
-        if(j>0){
-          v.addEdge(cells[(i-1)*rows+j-1],1,dir=false);//to left and above
+      if(i>0){//if not first column
+        v.addEdge(cells[(i-1)*rows+j],2,dir=false);//to left
+        if(j<(rows-1)){//if not last row
+          v.addEdge(cells[(i-1)*rows+j+1],1.5,dir=false);//to left and below
         }
       }
-      if(j>0){
-        v.addEdge(cells[i*rows+j-1],1,dir=false);//to left
+      if(j>0){//if not first row
+        v.addEdge(cells[i*rows+j-1],1,dir=false);//above
+        if(i>0){//and there is a column to the left
+          v.addEdge(cells[(i-1)*rows+j-1],1.5,dir=false);//to left and above
+        }
       }
       cells.push(v);//create a vertex containin x,y for top left of cell represented by vertex
     }
